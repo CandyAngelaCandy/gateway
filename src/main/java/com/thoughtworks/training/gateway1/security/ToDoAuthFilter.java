@@ -8,6 +8,8 @@ import io.jsonwebtoken.Jwts;
 import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Collections;
 
 @Component
 public class ToDoAuthFilter extends OncePerRequestFilter {
@@ -36,6 +39,8 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
 
                 String internalToken = jwtTokenGenerateInternalToken(token);
 
+
+
                 RequestContext requestContext = RequestContext.getCurrentContext();
                 requestContext.addZuulRequestHeader(HttpHeaders.AUTHORIZATION,internalToken);
             }
@@ -53,6 +58,10 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
     public String jwtTokenGenerateInternalToken(String token) {
 
         User user = userClient.verifyToken(token);
+
+        SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList()));
+
         String internalToken = String.format("%s:%s",user.getId(),user.getName());
         return internalToken;
     }
