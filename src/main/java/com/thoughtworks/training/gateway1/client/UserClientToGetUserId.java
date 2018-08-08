@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "user", url = "http://localhost:8081")
-public interface UserClient {
+public interface UserClientToGetUserId {
 
-    @PostMapping("/verifications")
-    User verifyToken(@RequestBody String token);
+    @PostMapping("/getUserIdByName")
+    int getUserIdByName(@RequestBody String name);
 
 }

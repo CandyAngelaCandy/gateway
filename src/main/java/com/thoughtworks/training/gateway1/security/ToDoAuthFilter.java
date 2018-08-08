@@ -39,8 +39,6 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
 
                 String internalToken = jwtTokenGenerateInternalToken(token);
 
-
-
                 RequestContext requestContext = RequestContext.getCurrentContext();
                 requestContext.addZuulRequestHeader(HttpHeaders.AUTHORIZATION,internalToken);
             }
