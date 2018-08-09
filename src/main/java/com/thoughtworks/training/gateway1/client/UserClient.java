@@ -5,7 +5,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "user", url = "http://localhost:8081")
+@FeignClient(name="user",serviceId = "user-service")
 public interface UserClient {
 
     @PostMapping("/verifications")

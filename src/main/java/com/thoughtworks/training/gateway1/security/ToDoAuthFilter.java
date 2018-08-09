@@ -6,6 +6,7 @@ import com.thoughtworks.training.gateway1.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jdk.nashorn.internal.ir.RuntimeNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +23,17 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
 
+@Slf4j
 @Component
 public class ToDoAuthFilter extends OncePerRequestFilter {
+
 
     @Autowired
     private UserClient userClient;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-
+        log.info("incoming request {}",request.getServletPath());
         try {
 
             String token = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -45,7 +48,7 @@ public class ToDoAuthFilter extends OncePerRequestFilter {
 
         } catch (RuntimeException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, String.format("authentication failed: %s", e.getMessage()));
-            return;
+            //return;
         }
 
 

@@ -1,17 +1,36 @@
 server:
   port: 8080
   context-path: /api
+#
+#spring:
+#  application:
+#    name: gateway
+#  cloud:
+#    consul:
+#      host: consul
+#      port: 8500
+#      discovery:
+#        health-check-path: /api/health
+#        instanceId: ${spring.application.name}:${random.int}
+
+user-service:
+  ribbon:
+    listOfServers: localhost:8081
+
+todo-service:
+  ribbon:
+    listOfServers: localhost:8082
 
 zuul:
   sensitiveHeaders:
   routes:
     register-service:
       path: /users
-      url: http://127.0.0.1:8081
+      serviceId: user-service
       strip-prefix: false
     todo-service:
       path: /todos
-      url: http://127.0.0.1:8082
+      serviceId: todo-service
       strip-prefix: false
 
 logging:
